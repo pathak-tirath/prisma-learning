@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  books     Book[]
+  createdAt DateTime @default(now())
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  title     String
+  published Int?
+  authorId  Int
+  author    Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([authorId])
+}
